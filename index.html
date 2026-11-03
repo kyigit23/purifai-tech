@@ -3,312 +3,480 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>PURIFAI: Every drop pumped, made visible</title>
-<meta name="description" content="PURIFAI uses satellite data to find farms that pump too much groundwater, and helps them switch to drip and solar irrigation with grants and 0% loans.">
-<meta property="og:title" content="PURIFAI: Every drop pumped, made visible">
-<meta property="og:description" content="Satellite data that finds groundwater overuse on farms, and the grants, loans and dealers that fix it.">
+<title>PURIFAI | Groundwater intelligence from space</title>
+<meta name="description" content="PURIFAI uses satellite data and AI to find farms that over-pump groundwater, then connects them with irrigation dealers, grants and 0% loans to switch to drip and solar.">
+<meta property="og:title" content="PURIFAI | Groundwater intelligence from space">
+<meta property="og:description" content="Satellite data and AI that find groundwater overuse on farms, and the dealers, grants and loans that fix it.">
 <meta property="og:image" content="https://purifaitech.com/assets/logo-512.png">
 <meta property="og:url" content="https://purifaitech.com/">
-<meta name="theme-color" content="#0E5C6B">
+<meta name="theme-color" content="#04131A">
 <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="assets/logo-512.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@300..700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js');</script>
 <style>
   :root {
+    --bg: #04131A;
+    --bg-2: #071C24;
+    --surface: #0A2530;
+    --line: rgba(190, 230, 235, .10);
+    --line-strong: rgba(190, 230, 235, .18);
+    --text: #E8F4F5;
+    --muted: #8FAAB0;
+    --dim: #5F7C83;
+    --aqua: #2BB3C0;
+    --aqua-hi: #5ED3DE;
     --deep: #0E5C6B;
-    --deeper: #083F4A;
-    --aquifer: #2BB3C0;
-    --mist: #CDEFF2;
-    --mist-soft: #EEF8F9;
-    --soil: #C9A77C;
-    --soil-dark: #8B6640;
-    --field: #5FAE4E;
-    --paper: #FFFFFF;
-    --ink: #0A3540;
-    --ink-soft: #4A6B73;
-    --measure: 64ch;
-    --gutter: clamp(20px, 5vw, 72px);
-    --font: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
+    --amber: #E3A762;
+    --green: #6CC15A;
+    --sans: "Geist", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+    --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, monospace;
+    --max: 1180px;
+    --pad: clamp(20px, 4.5vw, 40px);
   }
   * { box-sizing: border-box; }
   html { scroll-behavior: smooth; }
-  body {
-    margin: 0;
-    background: var(--paper);
-    color: var(--ink);
-    font-family: var(--font);
-    font-size: 1.0625rem;
-    line-height: 1.6;
-    font-variation-settings: "wdth" 100;
-    -webkit-font-smoothing: antialiased;
-  }
-  img { max-width: 100%; display: block; }
-  a { color: inherit; }
-  :focus-visible { outline: 3px solid var(--aquifer); outline-offset: 3px; border-radius: 4px; }
-  .wrap { width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 var(--gutter); }
+  body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--sans); font-size: 16px; line-height: 1.6; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+  img { display: block; max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  :focus-visible { outline: 2px solid var(--aqua-hi); outline-offset: 3px; border-radius: 6px; }
+  .container { width: 100%; max-width: var(--max); margin: 0 auto; padding: 0 var(--pad); }
+  h1, h2, h3 { margin: 0; font-weight: 600; letter-spacing: -0.03em; }
+  h2 { font-size: clamp(2rem, 4.2vw, 3.1rem); line-height: 1.08; max-width: 20ch; }
+  .lead { color: var(--muted); font-size: clamp(1.05rem, 1.5vw, 1.2rem); line-height: 1.6; max-width: 56ch; margin: 18px 0 0; }
+  .tag { font-family: var(--mono); font-size: .78rem; color: var(--aqua-hi); letter-spacing: .02em; }
+  .tag + h2 { margin-top: 14px; }
 
   /* ---------- Nav ---------- */
-  .nav { display: flex; align-items: center; justify-content: space-between; padding-top: 22px; padding-bottom: 22px; }
-  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 750; font-size: 1.3rem; letter-spacing: 0.02em; color: var(--deep); }
-  .brand img { width: 34px; height: auto; }
-  .nav ul { list-style: none; display: flex; gap: clamp(14px, 3vw, 32px); margin: 0; padding: 0; align-items: center; }
-  .nav a { text-decoration: none; font-weight: 500; color: var(--ink-soft); }
-  .nav a:hover { color: var(--deep); }
-  .nav .nav-cta { color: var(--paper); background: var(--deep); padding: 9px 18px; border-radius: 999px; }
-  .nav .nav-cta:hover { color: var(--paper); background: var(--deeper); }
-  @media (max-width: 640px) { .nav .hide-sm { display: none; } }
+  .nav-wrap { position: sticky; top: 0; z-index: 50; backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); background: rgba(4, 19, 26, .72); border-bottom: 1px solid transparent; transition: border-color .3s; }
+  .nav-wrap.scrolled { border-bottom-color: var(--line); }
+  .nav { display: flex; align-items: center; justify-content: space-between; height: 68px; }
+  .brand { display: flex; align-items: center; gap: 10px; font-weight: 650; letter-spacing: .04em; font-size: 1.05rem; }
+  .brand img { width: 24px; height: auto; }
+  .nav ul { display: flex; align-items: center; gap: 30px; list-style: none; margin: 0; padding: 0; font-size: .95rem; }
+  .nav ul a { color: var(--muted); transition: color .2s; }
+  .nav ul a:hover { color: var(--text); }
+  @media (max-width: 760px) { .nav .links { display: none; } }
+
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; height: 44px; padding: 0 20px; border-radius: 10px; font-weight: 550; font-size: .95rem; transition: background-color .2s, border-color .2s, color .2s, transform .2s; white-space: nowrap; }
+  .nav ul a.btn-primary, .btn-primary { background: var(--text); color: var(--bg); }
+  .nav ul a.btn-primary:hover, .btn-primary:hover { background: #fff; color: var(--bg); transform: translateY(-1px); }
+  .btn-sm { height: 36px; padding: 0 14px; border-radius: 8px; font-size: .9rem; }
+  .btn-line { border: 1px solid var(--line-strong); color: var(--text); background: rgba(255,255,255,.02); }
+  .btn-line:hover { border-color: rgba(190,230,235,.36); background: rgba(255,255,255,.05); }
 
   /* ---------- Hero ---------- */
-  .hero { padding-top: clamp(28px, 6vw, 72px); padding-bottom: clamp(28px, 4vw, 48px); }
-  .hero h1 {
-    margin: 0;
-    font-size: clamp(2.7rem, 7.6vw, 6.4rem);
-    line-height: 0.98;
-    letter-spacing: -0.035em;
-    font-weight: 700;
-    font-variation-settings: "wdth" 82, "opsz" 96;
-    color: var(--deep);
-    max-width: 12ch;
-  }
-  .hero p.lede { margin: 28px 0 0; max-width: 46ch; font-size: clamp(1.1rem, 1.6vw, 1.3rem); color: var(--ink-soft); line-height: 1.55; }
-  .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
-  .btn { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 600; padding: 14px 24px; border-radius: 999px; border: 2px solid var(--deep); transition: background-color .2s, color .2s; }
-  .btn-primary { background: var(--deep); color: var(--paper); }
-  .btn-primary:hover { background: var(--deeper); border-color: var(--deeper); }
-  .btn-ghost { color: var(--deep); background: transparent; }
-  .btn-ghost:hover { background: var(--mist-soft); }
+  .hero { position: relative; overflow: hidden; padding: clamp(64px, 9vw, 112px) 0 0; }
+  .hero::before { content: ""; position: absolute; inset: 0; pointer-events: none;
+    background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size: 64px 64px; background-position: center top;
+    mask-image: radial-gradient(ellipse 70% 55% at 50% 22%, #000 20%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 22%, #000 20%, transparent 75%); opacity: .55; }
+  .hero::after { content: ""; position: absolute; left: 50%; top: 38%; width: 1100px; height: 700px; transform: translateX(-50%); pointer-events: none;
+    background: radial-gradient(closest-side, rgba(43,179,192,.22), rgba(43,179,192,0)); filter: blur(10px); }
+  .hero .container { position: relative; z-index: 1; text-align: center; }
+  .pill { display: inline-flex; align-items: center; gap: 10px; padding: 6px 14px 6px 10px; border: 1px solid var(--line-strong); border-radius: 999px; font-size: .88rem; color: var(--muted); background: rgba(10,37,48,.6); transition: border-color .2s; }
+  .pill:hover { border-color: rgba(94,211,222,.5); }
+  .pill .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--aqua); box-shadow: 0 0 0 4px rgba(43,179,192,.18); flex: none; }
+  .pill strong { color: var(--text); font-weight: 550; margin-right: 6px; }
+  .hero h1 { margin: 26px auto 0; font-size: clamp(2.6rem, 7vw, 5.4rem); line-height: 1.02; letter-spacing: -0.045em; max-width: 14ch;
+    background: linear-gradient(180deg, #F4FBFB 30%, #9CC7CD 100%); -webkit-background-clip: text; background-clip: text; color: transparent; }
+  .hero .lead { margin: 24px auto 0; text-align: center; }
+  .hero .actions { display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; margin-top: 34px; }
 
-  /* ---------- Cross-section (signature element) ---------- */
-  .ground { position: relative; z-index: 0; width: 100%; line-height: 0; overflow: hidden; margin-top: -21vw; pointer-events: none; }
-  .ground svg { width: 100%; height: auto; display: block; }
-  .hero { position: relative; z-index: 1; }
-  @media (max-width: 900px) {
-    .ground { margin-top: -6vw; }
-    .ground svg { width: 190%; margin-left: -78%; }
+  /* product window */
+  .window { position: relative; margin: clamp(48px, 7vw, 80px) auto 0; max-width: 1120px; border: 1px solid var(--line-strong); border-radius: 16px; background: var(--bg-2); overflow: hidden; text-align: left;
+    box-shadow: 0 40px 120px -30px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.02) inset; }
+  .window-bar { display: flex; align-items: center; justify-content: space-between; gap: 12px; height: 46px; padding: 0 16px; border-bottom: 1px solid var(--line); font-size: .85rem; color: var(--muted); }
+  .window-bar .crumbs { display: flex; gap: 8px; align-items: center; white-space: nowrap; overflow: hidden; }
+  .window-bar .crumbs b { color: var(--text); font-weight: 550; }
+  .window-bar .crumbs svg { width: 14px; height: 14px; opacity: .5; flex: none; }
+  .sim { font-family: var(--mono); font-size: .72rem; color: var(--dim); border: 1px solid var(--line); border-radius: 6px; padding: 3px 8px; white-space: nowrap; }
+  .window-body { display: grid; grid-template-columns: 1fr 300px; }
+  .map { position: relative; aspect-ratio: 18 / 11; overflow: hidden; background: #2a2a22; }
+  .map img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; filter: saturate(.85) brightness(.78) contrast(1.05); }
+  .map::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(4,19,26,.10), rgba(4,19,26,.35)); pointer-events: none; }
+  .map svg { position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
+  .det-label { font-family: var(--mono); font-size: 25px; font-weight: 500; }
+  .callout { position: absolute; z-index: 2; right: 37%; top: 47%; width: 232px; padding: 14px 16px; border-radius: 12px; border: 1px solid rgba(227,167,98,.45);
+    background: rgba(5,20,27,.86); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); font-size: .82rem; color: var(--muted); }
+  .callout .id { font-family: var(--mono); color: var(--amber); font-size: .76rem; }
+  .callout .big { display: block; margin: 4px 0 8px; color: var(--text); font-size: 1.35rem; font-weight: 600; letter-spacing: -0.02em; }
+  .callout .row { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 7px; margin-top: 7px; }
+  .callout .row span:last-child { color: var(--text); }
+  .scan { position: absolute; z-index: 1; top: 0; bottom: 0; width: 22%; left: -22%; pointer-events: none;
+    background: linear-gradient(90deg, rgba(94,211,222,0), rgba(94,211,222,.16) 85%, rgba(94,211,222,.75) 99%, rgba(94,211,222,0)); }
+
+  .side { border-left: 1px solid var(--line); padding: 18px; display: flex; flex-direction: column; gap: 14px; font-size: .86rem; }
+  .side h3 { font-size: .92rem; font-weight: 550; letter-spacing: -0.01em; display: flex; justify-content: space-between; align-items: baseline; }
+  .side h3 span { font-family: var(--mono); font-size: .75rem; color: var(--dim); font-weight: 400; }
+  .kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .kpi { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; }
+  .kpi b { display: block; font-size: 1.25rem; font-weight: 600; letter-spacing: -0.02em; }
+  .kpi span { color: var(--dim); font-size: .76rem; }
+  .parcels { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+  .parcels li { border: 1px solid var(--line); border-radius: 10px; padding: 10px 12px; display: grid; grid-template-columns: 1fr auto; gap: 2px 10px; }
+  .parcels li.active { border-color: rgba(227,167,98,.45); background: rgba(227,167,98,.06); }
+  .parcels .pid { font-family: var(--mono); font-size: .76rem; color: var(--muted); }
+  .parcels .use { font-weight: 600; text-align: right; color: var(--amber); }
+  .parcels .st { grid-column: 1 / -1; display: inline-flex; align-items: center; gap: 6px; color: var(--muted); font-size: .78rem; }
+  .parcels .st i { width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
+  .parcels .st i.wait { background: var(--dim); }
+  .window-note { margin: 14px auto 0; text-align: center; font-size: .8rem; color: var(--dim); }
+  @media (max-width: 920px) {
+    .window-body { grid-template-columns: 1fr; }
+    .side { border-left: 0; border-top: 1px solid var(--line); }
+    .side .parcels li:nth-child(n+3) { display: none; }
   }
-  .beam { transform-box: fill-box; transform-origin: 50% 0%; }
-  .water-level { transform-box: fill-box; }
+  @media (max-width: 640px) {
+    .callout, .det-label, .det-tag { display: none; }
+    .window-bar .crumbs .hide-sm { display: none; }
+  }
+  /* load sequence: the one orchestrated moment on the page */
   @media (prefers-reduced-motion: no-preference) {
-    .beam { animation: sweep 2.6s ease-in-out .4s both; }
-    .water-level { animation: drop 2.4s cubic-bezier(.5,0,.2,1) 1.2s both; }
-    .hit { animation: glow 1s ease-out 2.6s both; }
+    .js .scan { animation: scan 2.4s cubic-bezier(.45,0,.25,1) .5s 1 forwards; }
+    .js .det { opacity: 0; animation: appear .5s ease-out forwards; }
+    .js .det.d1 { animation-delay: 1.0s; } .js .det.d2 { animation-delay: 1.35s; } .js .det.d3 { animation-delay: 1.7s; }
+    .js .det.d4 { animation-delay: 2.0s; } .js .det.d5 { animation-delay: 2.2s; }
+    .js .callout { opacity: 0; animation: appear .6s ease-out 2.6s forwards; }
+    .js .ring { transform-box: fill-box; transform-origin: center; animation: ping 2.4s ease-out 3s infinite; }
+    .js .orbit-dot { animation: orbit 9s linear infinite; transform-origin: 260px 210px; }
   }
-  @keyframes sweep { from { transform: rotate(30deg); opacity: 0; } 20% { opacity: 1; } 55% { transform: rotate(-18deg); } to { transform: rotate(0deg); opacity: 1; } }
-  @keyframes drop { from { transform: translateY(-34px); } to { transform: translateY(0); } }
-  @keyframes glow { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes scan { from { left: -22%; } to { left: 100%; } }
+  @keyframes appear { from { opacity: 0; } to { opacity: 1; } }
+  @keyframes ping { 0% { transform: scale(1); opacity: .8; } 70%, 100% { transform: scale(1.3); opacity: 0; } }
+  @keyframes orbit { to { transform: rotate(360deg); } }
 
-  /* ---------- Underground: problem ---------- */
-  .under { background: var(--deep); color: var(--mist); }
-  .problem { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(32px, 6vw, 96px); padding-top: clamp(64px, 9vw, 120px); padding-bottom: clamp(64px, 9vw, 120px); }
-  .problem h2 { margin: 0; color: var(--paper); font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.05; letter-spacing: -0.025em; font-weight: 650; font-variation-settings: "wdth" 85, "opsz" 72; max-width: 14ch; }
-  .problem .intro { margin: 22px 0 0; max-width: 40ch; color: var(--mist); }
-  .readings { position: relative; list-style: none; margin: 0; padding: 0 0 0 40px; }
-  .readings::before { content: ""; position: absolute; left: 8px; top: 6px; bottom: 6px; width: 4px; border-radius: 2px; background: linear-gradient(var(--soil) 0 38%, var(--aquifer) 38% 100%); }
-  .readings li { position: relative; padding: 0 0 38px; }
-  .readings li:last-child { padding-bottom: 0; }
-  .readings li::before { content: ""; position: absolute; left: -40px; top: .55em; width: 20px; height: 4px; border-radius: 2px; background: var(--mist); }
-  .readings .value { display: block; color: var(--paper); font-weight: 700; font-size: clamp(2.2rem, 4.6vw, 3.6rem); line-height: 1; letter-spacing: -0.03em; font-variation-settings: "wdth" 78, "opsz" 96; }
-  .readings .what { display: block; margin-top: 8px; max-width: 34ch; }
-  .readings .src { display: block; margin-top: 4px; font-size: .82rem; color: #8FC6CD; }
-  @media (max-width: 820px) { .problem { grid-template-columns: 1fr; } }
+  /* ---------- Recognition strip ---------- */
+  .strip { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); margin-top: clamp(72px, 9vw, 112px); }
+  .strip .container { display: grid; grid-template-columns: repeat(3, 1fr); }
+  .strip .container > div { padding: 26px 0; }
+  .strip .container > div + div { border-left: 1px solid var(--line); padding-left: 28px; }
+  .strip b { display: block; font-weight: 550; font-size: 1rem; }
+  .strip span { color: var(--muted); font-size: .9rem; }
+  @media (max-width: 760px) { .strip .container { grid-template-columns: 1fr; } .strip .container > div + div { border-left: 0; padding-left: 0; border-top: 1px solid var(--line); } }
 
-  /* ---------- How it works ---------- */
-  section { scroll-margin-top: 20px; }
-  .block { padding-top: clamp(72px, 10vw, 128px); padding-bottom: clamp(24px, 4vw, 48px); }
-  .block h2 { margin: 0; font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.05; letter-spacing: -0.025em; font-weight: 650; color: var(--deep); font-variation-settings: "wdth" 85, "opsz" 72; max-width: 18ch; }
-  .block .sub { margin: 18px 0 0; color: var(--ink-soft); max-width: 52ch; }
-  .steps { position: relative; list-style: none; margin: 56px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 4vw, 56px); counter-reset: step; }
-  .steps::before { content: ""; position: absolute; left: 28px; right: 28px; top: 27px; height: 4px; background: var(--mist); border-radius: 2px; z-index: 0; }
-  .steps li { position: relative; z-index: 1; counter-increment: step; }
-  .steps .num { width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; background: var(--paper); border: 4px solid var(--deep); color: var(--deep); font-weight: 750; font-size: 1.35rem; }
-  .steps li:nth-child(3) .num { background: var(--deep); color: var(--paper); }
-  .steps h3 { margin: 22px 0 8px; font-size: 1.5rem; letter-spacing: -0.01em; font-weight: 650; color: var(--ink); }
-  .steps p { margin: 0; color: var(--ink-soft); max-width: 34ch; }
-  @media (max-width: 820px) {
-    .steps { grid-template-columns: 1fr; }
-    .steps::before { left: 27px; right: auto; top: 28px; bottom: 28px; width: 4px; height: auto; }
-    .steps li { padding-left: 84px; min-height: 58px; }
-    .steps .num { position: absolute; left: 0; top: 0; }
-    .steps h3 { margin-top: 10px; }
-  }
+  /* ---------- Sections ---------- */
+  .section { padding: clamp(88px, 11vw, 140px) 0 0; scroll-margin-top: 40px; }
+  .stats { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 56px; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+  .stat { padding: 32px 28px 30px; background: linear-gradient(180deg, rgba(10,37,48,.55), rgba(10,37,48,0)); }
+  .stat + .stat { border-left: 1px solid var(--line); }
+  .stat b { display: block; font-size: clamp(2.4rem, 4.6vw, 3.6rem); font-weight: 600; letter-spacing: -0.045em; line-height: 1; }
+  .stat b small { font-size: .5em; letter-spacing: -0.02em; color: var(--muted); font-weight: 500; margin-left: 6px; }
+  .stat p { margin: 14px 0 0; color: var(--muted); max-width: 30ch; }
+  @media (max-width: 860px) { .stats { grid-template-columns: 1fr; } .stat + .stat { border-left: 0; border-top: 1px solid var(--line); } }
 
-  /* ---------- Who it's for ---------- */
-  .who { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 48px; border-top: 2px solid var(--mist); }
-  .who > div { padding: 28px clamp(0px, 2vw, 28px) 8px 0; }
-  .who > div + div { padding-left: clamp(16px, 2.5vw, 32px); border-left: 2px solid var(--mist); }
-  .who h3 { margin: 0 0 8px; font-size: 1.3rem; font-weight: 650; color: var(--deep); }
-  .who p { margin: 0; color: var(--ink-soft); max-width: 32ch; }
-  @media (max-width: 820px) {
-    .who { grid-template-columns: 1fr; }
-    .who > div + div { padding-left: 0; border-left: 0; border-top: 2px solid var(--mist); }
-  }
+  /* how it works: bento */
+  .bento { display: grid; grid-template-columns: 1.25fr 1fr; gap: 16px; margin-top: 56px; }
+  .tile { position: relative; border: 1px solid var(--line); border-radius: 16px; background: var(--bg-2); padding: 28px; overflow: hidden; }
+  .tile h3 { font-size: 1.35rem; margin-top: 10px; }
+  .tile p { color: var(--muted); margin: 10px 0 0; max-width: 42ch; }
+  .tile.detect { grid-row: span 2; display: flex; flex-direction: column; }
+  .tile.detect .viz { position: relative; margin: 28px -28px -28px; flex: 1; min-height: 280px; border-top: 1px solid var(--line); overflow: hidden; }
+  .tile.detect .viz img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 72% 70%; filter: saturate(.8) brightness(.72); transform: scale(1.6); transform-origin: 72% 70%; }
+  .tile.detect .viz svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+  .flow { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 24px; font-size: .86rem; }
+  .flow span { padding: 7px 12px; border: 1px solid var(--line-strong); border-radius: 8px; background: rgba(255,255,255,.02); }
+  .flow span.hl { border-color: rgba(43,179,192,.5); color: var(--aqua-hi); }
+  .flow svg { width: 14px; height: 14px; color: var(--dim); }
+  .chart { margin-top: 22px; }
+  .chart svg { width: 100%; height: auto; display: block; }
+  .chart .legend { display: flex; gap: 18px; font-size: .78rem; color: var(--dim); margin-top: 8px; }
+  .chart .legend i { display: inline-block; width: 14px; height: 2px; vertical-align: middle; margin-right: 6px; }
+  @media (max-width: 860px) { .bento { grid-template-columns: 1fr; } .tile.detect { grid-row: auto; } }
 
-  /* ---------- Recognition ---------- */
-  .recognition { margin-top: clamp(72px, 9vw, 112px); background: var(--mist-soft); }
-  .recognition .wrap { display: flex; flex-wrap: wrap; gap: 18px 48px; align-items: baseline; justify-content: space-between; padding-top: 40px; padding-bottom: 40px; }
-  .recognition p { margin: 0; font-size: clamp(1.15rem, 2vw, 1.5rem); font-weight: 600; color: var(--deep); line-height: 1.3; max-width: 30ch; }
-  .recognition span { color: var(--ink-soft); max-width: 44ch; }
+  /* learning loop */
+  .loop { display: grid; grid-template-columns: 1fr 1fr; gap: clamp(40px, 6vw, 88px); align-items: center; }
+  .loop ul { list-style: none; margin: 32px 0 0; padding: 0; display: grid; gap: 18px; }
+  .loop li { display: grid; grid-template-columns: 28px 1fr; gap: 14px; color: var(--muted); }
+  .loop li b { color: var(--text); font-weight: 550; display: block; }
+  .loop li svg { width: 22px; height: 22px; color: var(--aqua); margin-top: 3px; }
+  .loop-fig { border: 1px solid var(--line); border-radius: 16px; background: radial-gradient(circle at 50% 50%, rgba(43,179,192,.10), transparent 65%), var(--bg-2); padding: 20px; }
+  .loop-fig svg { width: 100%; height: auto; display: block; }
+  @media (max-width: 860px) { .loop { grid-template-columns: 1fr; } }
 
-  /* ---------- Team ---------- */
-  .team { list-style: none; margin: 48px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 4vw, 56px); }
-  .team img { width: 136px; height: 136px; border-radius: 50%; background: var(--mist-soft); box-shadow: 0 0 0 4px var(--paper), 0 0 0 6px var(--mist); }
-  .team h3 { margin: 22px 0 4px; font-size: 1.3rem; font-weight: 650; }
-  .team p { margin: 0; color: var(--ink-soft); line-height: 1.45; }
-  @media (max-width: 820px) { .team { grid-template-columns: 1fr; } .team li { display: grid; grid-template-columns: 96px 1fr; gap: 20px; align-items: center; } .team img { width: 96px; height: 96px; } .team h3 { margin-top: 0; } }
+  /* who */
+  .who { display: grid; grid-template-columns: repeat(3, 1fr); gap: 32px; margin-top: 56px; }
+  .who > div { border-top: 1px solid var(--line-strong); padding-top: 22px; }
+  .who h3 { font-size: 1.15rem; display: flex; align-items: center; gap: 10px; }
+  .who h3 svg { width: 20px; height: 20px; color: var(--aqua); flex: none; }
+  .who p { margin: 10px 0 0; color: var(--muted); max-width: 34ch; }
+  .who .price { margin-top: 16px; font-family: var(--mono); font-size: .8rem; color: var(--aqua-hi); }
+  @media (max-width: 860px) { .who { grid-template-columns: 1fr; gap: 28px; } }
 
-  /* ---------- Contact / footer ---------- */
-  .contact { margin-top: clamp(80px, 10vw, 128px); background: var(--deep); color: var(--mist); }
-  .contact .wrap { padding-top: clamp(64px, 9vw, 112px); padding-bottom: 40px; }
-  .contact h2 { margin: 0; color: var(--paper); font-size: clamp(2.2rem, 5.6vw, 4.6rem); line-height: 1; letter-spacing: -0.03em; font-weight: 700; font-variation-settings: "wdth" 80, "opsz" 96; max-width: 15ch; }
-  .contact p { margin: 22px 0 0; max-width: 48ch; }
-  .contact .btn-primary { background: var(--paper); color: var(--deep); border-color: var(--paper); }
-  .contact .btn-primary:hover { background: var(--mist); border-color: var(--mist); }
-  .contact .btn-ghost { color: var(--paper); border-color: rgba(255,255,255,.5); }
-  .contact .btn-ghost:hover { background: rgba(255,255,255,.08); }
-  .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: clamp(64px, 8vw, 96px); padding-top: 22px; border-top: 1px solid rgba(205,239,242,.25); font-size: .9rem; color: #8FC6CD; }
-  .foot a { color: #8FC6CD; }
+  /* team */
+  .team { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 56px 0 0; list-style: none; padding: 0; }
+  .team li { border: 1px solid var(--line); border-radius: 16px; padding: 24px; background: var(--bg-2); display: flex; gap: 18px; align-items: center; }
+  .team img { width: 72px; height: 72px; border-radius: 50%; flex: none; box-shadow: 0 0 0 1px var(--line-strong); }
+  .team h3 { font-size: 1.05rem; letter-spacing: -0.01em; }
+  .team p { margin: 4px 0 0; color: var(--muted); font-size: .9rem; line-height: 1.45; }
+  @media (max-width: 960px) { .team { grid-template-columns: 1fr; } }
+
+  /* cta + footer */
+  .cta { margin-top: clamp(96px, 12vw, 150px); position: relative; overflow: hidden; border-top: 1px solid var(--line); }
+  .cta::before { content: ""; position: absolute; left: 50%; bottom: -300px; width: 1000px; height: 600px; transform: translateX(-50%); background: radial-gradient(closest-side, rgba(43,179,192,.20), transparent); pointer-events: none; }
+  .cta .container { position: relative; text-align: center; padding-top: clamp(80px, 10vw, 128px); padding-bottom: clamp(80px, 10vw, 128px); }
+  .cta h2 { margin: 0 auto; max-width: 16ch; }
+  .cta .lead { margin-left: auto; margin-right: auto; }
+  .cta .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 34px; }
+  footer { border-top: 1px solid var(--line); }
+  footer .container { display: flex; flex-wrap: wrap; gap: 16px; justify-content: space-between; align-items: center; padding-top: 26px; padding-bottom: 26px; font-size: .88rem; color: var(--dim); }
+  footer nav { display: flex; gap: 22px; }
+  footer nav a:hover { color: var(--text); }
 </style>
 </head>
 <body>
 
-<header class="wrap">
-  <nav class="nav" aria-label="Main">
-    <a class="brand" href="#top" aria-label="PURIFAI home"><img src="assets/logo.svg" alt="" width="34" height="41">PURIFAI</a>
+<div class="nav-wrap" id="nav">
+  <div class="container nav">
+    <a class="brand" href="#top" aria-label="PURIFAI home"><img src="assets/logo.svg" alt="" width="24" height="29">PURIFAI</a>
     <ul>
-      <li class="hide-sm"><a href="#how">How it works</a></li>
-      <li class="hide-sm"><a href="#team">Team</a></li>
-      <li><a class="nav-cta" href="mailto:info@purifaitech.com">Contact us</a></li>
+      <li class="links"><a href="#problem">Problem</a></li>
+      <li class="links"><a href="#how">How it works</a></li>
+      <li class="links"><a href="#team">Team</a></li>
+      <li><a class="btn btn-primary btn-sm" href="mailto:info@purifaitech.com">Contact us</a></li>
     </ul>
-  </nav>
-</header>
+  </div>
+</div>
 
 <main id="top">
-  <section class="wrap hero" aria-labelledby="hero-title">
-    <h1 id="hero-title">Every drop pumped, made visible.</h1>
-    <p class="lede">PURIFAI finds the farms that pump too much groundwater, then helps them switch to drip and solar irrigation with grants and 0% loans.</p>
-    <div class="actions">
-      <a class="btn btn-primary" href="mailto:info@purifaitech.com">Talk to us</a>
-      <a class="btn btn-ghost" href="#how">See how it works</a>
-    </div>
-  </section>
-
-  <!-- Signature: a cross-section of a farm, read from the satellite down to the aquifer -->
-  <div class="ground" role="img" aria-label="Illustration: a satellite scans a field while wells reach down through the soil into an aquifer whose water level is falling.">
-    <svg viewBox="0 0 1440 640" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
-      <defs>
-        <linearGradient id="beamFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="#2BB3C0" stop-opacity=".5"/>
-          <stop offset="1" stop-color="#2BB3C0" stop-opacity=".05"/>
-        </linearGradient>
-      </defs>
-      <!-- orbit -->
-      <path d="M900 70 Q1100 30 1440 64" fill="none" stroke="#CDEFF2" stroke-width="2" stroke-dasharray="4 10"/>
-      <!-- scan beam + satellite -->
-      <g transform="translate(1040 66)">
-        <polygon class="beam" points="0,10 -96,298 96,298" fill="url(#beamFill)"/>
-        <g transform="rotate(-12)">
-          <rect x="-16" y="-12" width="32" height="24" rx="5" fill="#0E5C6B"/>
-          <rect x="-4" y="12" width="8" height="8" rx="2" fill="#0E5C6B"/>
-          <rect x="-64" y="-7" width="42" height="14" rx="2" fill="#2BB3C0"/>
-          <rect x="22" y="-7" width="42" height="14" rx="2" fill="#2BB3C0"/>
-          <line x1="-22" y1="0" x2="-16" y2="0" stroke="#0E5C6B" stroke-width="3"/>
-          <line x1="16" y1="0" x2="22" y2="0" stroke="#0E5C6B" stroke-width="3"/>
-        </g>
-      </g>
-      <!-- field surface -->
-      <rect x="0" y="364" width="1440" height="10" fill="#5FAE4E"/>
-      <path fill="#5FAE4E" d="M120 364 q6 -18 12 0 M150 364 q6 -22 12 0 M180 364 q6 -16 12 0 M520 364 q6 -18 12 0 M552 364 q6 -22 12 0 M584 364 q6 -15 12 0 M1240 364 q6 -18 12 0 M1272 364 q6 -14 12 0 M1304 364 q6 -20 12 0"/>
-      <rect class="hit" x="944" y="356" width="192" height="18" rx="4" fill="#2BB3C0"/>
-      <!-- soil with strata -->
-      <rect x="0" y="374" width="1440" height="266" fill="#C9A77C"/>
-      <path d="M0 418 Q360 402 720 420 T1440 412" fill="none" stroke="#8B6640" stroke-width="5" opacity=".5"/>
-      <path d="M0 462 Q360 476 720 458 T1440 468" fill="none" stroke="#8B6640" stroke-width="4" opacity=".3"/>
-      <!-- earlier water level -->
-      <path d="M0 482 Q360 470 720 486 T1440 478" fill="none" stroke="#0E5C6B" stroke-width="2.5" stroke-dasharray="9 10" opacity=".6"/>
-      <!-- aquifer; its level drops once on load -->
-      <g class="water-level">
-        <path d="M0 520 Q360 502 720 524 T1440 514 L1440 700 L0 700 Z" fill="#2BB3C0"/>
-        <path d="M0 520 Q360 502 720 524 T1440 514" fill="none" stroke="#CDEFF2" stroke-width="3" opacity=".7"/>
-      </g>
-      <path d="M0 584 Q360 564 720 586 T1440 578 L1440 640 L0 640 Z" fill="#0E5C6B"/>
-      <!-- wells, each one deeper than the last -->
-      <g fill="#CDEFF2" stroke="#0E5C6B" stroke-width="5">
-        <rect x="256" y="348" width="14" height="208"/>
-        <rect x="686" y="348" width="14" height="240"/>
-        <rect x="1033" y="348" width="14" height="292"/>
-      </g>
-      <g fill="#0E5C6B">
-        <rect x="246" y="330" width="34" height="20" rx="5"/>
-        <rect x="676" y="330" width="34" height="20" rx="5"/>
-        <rect x="1023" y="330" width="34" height="20" rx="5"/>
-      </g>
-    </svg>
-  </div>
-
-  <div class="under">
-    <section class="wrap problem" aria-labelledby="problem-title">
-      <div>
-        <h2 id="problem-title">Farms use groundwater faster than it refills.</h2>
-        <p class="intro">Most of it is pumped from wells nobody measures, through flood irrigation that wastes much of it. The fix exists, and the state already pays for most of it. It just isn't reaching the right farms.</p>
+  <section class="hero" aria-labelledby="hero-title">
+    <div class="container">
+      <a class="pill" href="https://www.linkedin.com/company/purifaitech" target="_blank" rel="noopener"><span class="dot" aria-hidden="true"></span><span><strong>COP31</strong>Presenting in Antalya on 9 November</span></a>
+      <h1 id="hero-title">Groundwater intelligence from space</h1>
+      <p class="lead">PURIFAI uses satellite data and AI to find farms that over-pump groundwater, then connects them with irrigation dealers, grants and 0% loans to switch to drip and solar.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="mailto:info@purifaitech.com">Get in touch</a>
+        <a class="btn btn-line" href="#how">See how it works</a>
       </div>
-      <ul class="readings">
-        <li><span class="value">2.1 bn m³</span><span class="what">pumped every year beyond what the Konya basin can refill</span></li>
-        <li><span class="value">11 provinces</span><span class="what">now under an official groundwater restriction</span></li>
-        <li><span class="value">7%</span><span class="what">of irrigated land switched to modern irrigation through grants since 2007</span></li>
-      </ul>
-    </section>
-  </div>
 
-  <section id="how" class="wrap block" aria-labelledby="how-title">
-    <h2 id="how-title">From a satellite view to a new irrigation system.</h2>
-    <p class="sub">We work with the people farmers already trust: local irrigation and solar-pump dealers, and the banks that finance them.</p>
-    <ol class="steps">
-      <li><div class="num" aria-hidden="true">1</div><h3>Detect</h3><p>Satellite imagery shows which fields are irrigated and how much water they really use, every few days.</p></li>
-      <li><div class="num" aria-hidden="true">2</div><h3>Match</h3><p>We bring those farmers to local dealers, with the grants and 0% loans that cover most of the cost.</p></li>
-      <li><div class="num" aria-hidden="true">3</div><h3>Verify</h3><p>After installation we check the field again from space. Every measured well makes our model sharper.</p></li>
-    </ol>
-
-    <div class="who">
-      <div><h3>Farmers</h3><p>Use less water and electricity on the same land. They pay us nothing.</p></div>
-      <div><h3>Irrigation dealers</h3><p>Spend less time searching and more time installing, with buyers who qualify for support.</p></div>
-      <div><h3>Banks and agencies</h3><p>See where support goes and whether the water was actually saved.</p></div>
+      <div class="window" role="img" aria-label="Illustration of the PURIFAI interface: a satellite view of center-pivot farms with three parcels flagged for using more water than their crops need.">
+        <div class="window-bar" aria-hidden="true">
+          <div class="crumbs"><span class="hide-sm">Türkiye</span><svg class="hide-sm" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3l5 5-5 5"/></svg><b>Konya Basin</b><svg class="hide-sm" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 3l5 5-5 5"/></svg><span class="hide-sm">Water use, last 30 days</span></div>
+          <span class="sim">Simulated data</span>
+        </div>
+        <div class="window-body" aria-hidden="true">
+          <div class="map">
+            <img src="assets/fields.webp" alt="" width="1800" height="1100" fetchpriority="high">
+            <div class="scan"></div>
+            <svg viewBox="0 0 1800 1100" preserveAspectRatio="xMidYMid slice">
+              <g class="det d1" fill="none" stroke="#E3A762" stroke-width="4">
+                <circle cx="300" cy="300" r="132" stroke-dasharray="14 10"/>
+                <g class="det-tag"><rect x="190" y="140" width="220" height="40" rx="8" fill="rgba(5,20,27,.85)" stroke="none"/>
+                <text class="det-label" x="300" y="168" text-anchor="middle" fill="#E3A762" stroke="none">1.3× crop need</text></g>
+              </g>
+              <g class="det d2" fill="none" stroke="#E3A762" stroke-width="4">
+                <circle cx="860" cy="420" r="122" stroke-dasharray="14 10"/>
+                <g class="det-tag"><rect x="750" y="270" width="220" height="40" rx="8" fill="rgba(5,20,27,.85)" stroke="none"/>
+                <text class="det-label" x="860" y="298" text-anchor="middle" fill="#E3A762" stroke="none">1.2× crop need</text></g>
+              </g>
+              <g class="det d3">
+                <circle class="ring" cx="1300" cy="760" r="148" fill="none" stroke="#E3A762" stroke-width="3"/>
+                <circle cx="1300" cy="760" r="148" fill="rgba(227,167,98,.12)" stroke="#E3A762" stroke-width="5"/>
+                <path d="M1300 600v-30M1300 920v30M1140 760h-30M1460 760h30" stroke="#E3A762" stroke-width="5"/>
+              </g>
+              <g class="det d4" fill="none" stroke="#5ED3DE" stroke-width="3" opacity=".9">
+                <circle cx="1240" cy="300" r="136"/>
+                <g class="det-tag"><rect x="1166" y="146" width="148" height="40" rx="8" fill="rgba(5,20,27,.85)" stroke="none"/>
+                <text class="det-label" x="1240" y="174" text-anchor="middle" fill="#5ED3DE" stroke="none">Efficient</text></g>
+              </g>
+              <g class="det d5" fill="none" stroke="#5ED3DE" stroke-width="3" opacity=".9">
+                <circle cx="640" cy="800" r="126"/>
+              </g>
+            </svg>
+            <div class="callout">
+              <div class="id">PARCEL 42-118</div>
+              <span class="big">1.4× crop need</span>
+              <div class="row"><span>Irrigation</span><span>Flood</span></div>
+              <div class="row"><span>Grant eligible</span><span>Yes</span></div>
+              <div class="row"><span>Nearest dealer</span><span>11 km</span></div>
+            </div>
+          </div>
+          <div class="side">
+            <h3>This week <span>Konya</span></h3>
+            <div class="kpis">
+              <div class="kpi"><b>3</b><span>parcels flagged</span></div>
+              <div class="kpi"><b>2</b><span>dealers matched</span></div>
+            </div>
+            <ul class="parcels">
+              <li class="active"><span class="pid">42-118</span><span class="use">1.4×</span><span class="st"><i></i>Dealer matched</span></li>
+              <li><span class="pid">42-031</span><span class="use">1.3×</span><span class="st"><i></i>Grant eligible</span></li>
+              <li><span class="pid">41-207</span><span class="use">1.2×</span><span class="st"><i class="wait"></i>In review</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <p class="window-note">Product concept with simulated imagery and data.</p>
     </div>
   </section>
 
-  <aside class="recognition" aria-label="Recognition">
-    <div class="wrap">
-      <p>Selected at KREATE for Climate, Koç University</p>
-      <span>We present PURIFAI at COP31 in Antalya on 9 November 2026.</span>
+  <section class="strip" aria-label="Recognition">
+    <div class="container">
+      <div><b>KREATE for Climate</b><span>Selected from 100+ teams at Koç University</span></div>
+      <div><b>COP31, Antalya</b><span>Presenting to government officials on 9 November 2026</span></div>
+      <div><b>Built in Türkiye</b><span>Starting in the country's water-restricted basins</span></div>
     </div>
-  </aside>
+  </section>
 
-  <section id="team" class="wrap block" aria-labelledby="team-title">
-    <h2 id="team-title">The team</h2>
-    <ul class="team">
-      <li><img src="assets/team/kaan.webp" alt="Kaan Yiğit" width="136" height="136" loading="lazy"><div><h3>Kaan Yiğit</h3><p>Computer Engineering and Business, Koç University</p></div></li>
-      <li><img src="assets/team/kerem.webp" alt="Kerem İkizoğlu" width="136" height="136" loading="lazy"><div><h3>Kerem İkizoğlu</h3><p>Koç University. Two years of field work with well pumps</p></div></li>
-      <li><img src="assets/team/ugurkan.webp" alt="Uğurkan Yiğit Öztürk" width="136" height="136" loading="lazy"><div><h3>Uğurkan Yiğit Öztürk</h3><p>Ankara University. Grew up around farms and wells</p></div></li>
-    </ul>
+  <section class="section" id="problem" aria-labelledby="problem-title">
+    <div class="container">
+      <span class="tag">The problem</span>
+      <h2 id="problem-title">Farms are pumping groundwater faster than it refills.</h2>
+      <p class="lead">Most of it comes from wells nobody measures, and much of it is lost to flood irrigation. The fix exists and the state already pays for most of it. It just isn't reaching the right farms.</p>
+      <div class="stats">
+        <div class="stat"><b>2.1<small>bn m³</small></b><p>pumped every year beyond what the Konya basin can refill</p></div>
+        <div class="stat"><b>11<small>provinces</small></b><p>now under an official groundwater restriction in Türkiye</p></div>
+        <div class="stat"><b>7<small>%</small></b><p>of irrigated land moved to modern irrigation with grants since 2007</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="how" aria-labelledby="how-title">
+    <div class="container">
+      <span class="tag">How it works</span>
+      <h2 id="how-title">From a satellite pass to a new irrigation system.</h2>
+      <div class="bento">
+        <article class="tile detect">
+          <span class="tag">01</span>
+          <h3>Detect</h3>
+          <p>Satellite imagery and AI estimate how much water each field really uses, and flag the ones pumping far more than their crop needs.</p>
+          <div class="viz" aria-hidden="true">
+            <img src="assets/fields.webp" alt="" loading="lazy">
+          </div>
+        </article>
+        <article class="tile">
+          <span class="tag">02</span>
+          <h3>Match</h3>
+          <p>We send each flagged farm to a local drip or solar-pump dealer, with the grant and 0% loan that cover most of the cost.</p>
+          <div class="flow" aria-label="Farmer, then local dealer, then grant and 0% loan">
+            <span>Farmer</span>
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            <span>Local dealer</span>
+            <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4"/></svg>
+            <span class="hl">Grant up to 70%</span>
+            <span class="hl">0% loan</span>
+          </div>
+        </article>
+        <article class="tile">
+          <span class="tag">03</span>
+          <h3>Verify</h3>
+          <p>After installation we check the same field from space and report the water saved to banks and agencies.</p>
+          <div class="chart" aria-hidden="true">
+            <svg viewBox="0 0 400 110">
+              <line x1="0" y1="100" x2="400" y2="100" stroke="rgba(190,230,235,.12)"/>
+              <line x1="210" y1="6" x2="210" y2="100" stroke="rgba(190,230,235,.25)" stroke-dasharray="3 4"/>
+              <path d="M210 32 C230 60 250 66 280 68 S340 64 400 70" fill="none" stroke="#5ED3DE" stroke-width="2.5"/>
+              <path d="M0 36 C30 30 50 40 80 32 S140 26 170 34 S200 30 210 32" fill="none" stroke="#E3A762" stroke-width="2.5"/>
+              <text x="218" y="18" fill="#8FAAB0" font-family="Geist, sans-serif" font-size="12">Drip installed</text>
+            </svg>
+            <div class="legend"><span><i style="background:#E3A762"></i>Water use before</span><span><i style="background:#5ED3DE"></i>After</span><span>Illustrative</span></div>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="model-title">
+    <div class="container loop">
+      <div>
+        <span class="tag">Self-learning model</span>
+        <h2 id="model-title">A model that gets sharper with every well.</h2>
+        <p class="lead">Satellites see the whole basin. Partner wells tell us exactly how much was pumped. Each measured well recalibrates the model for the fields around it.</p>
+        <ul>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2v4M12 18v4M2 12h4M18 12h4"/></svg><div><b>Basin-wide coverage</b>Every irrigated field, refreshed every few days, without visiting a single farm.</div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg><div><b>Ground truth from partners</b>Measured wells from dealers and partners keep the estimates honest.</div></li>
+          <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M20 12a8 8 0 1 1-2.3-5.6M20 4v5h-5"/></svg><div><b>Better with scale</b>Every installation adds a before-and-after record to learn from.</div></li>
+        </ul>
+      </div>
+      <div class="loop-fig" aria-hidden="true">
+        <svg viewBox="0 0 520 420">
+          <circle cx="260" cy="210" r="150" fill="none" stroke="rgba(190,230,235,.16)" stroke-width="1.5" stroke-dasharray="4 6"/>
+          <g class="orbit-dot"><circle cx="260" cy="60" r="5" fill="#5ED3DE"/></g>
+          <g font-family="Geist, sans-serif" font-size="15" text-anchor="middle">
+            <rect x="180" y="38" width="160" height="44" rx="10" fill="#0A2530" stroke="rgba(94,211,222,.5)"/>
+            <text x="260" y="65" fill="#E8F4F5">Satellite signals</text>
+            <rect x="358" y="188" width="154" height="44" rx="10" fill="#0A2530" stroke="rgba(190,230,235,.22)"/>
+            <text x="435" y="215" fill="#E8F4F5">Water-use estimate</text>
+            <rect x="180" y="338" width="160" height="44" rx="10" fill="#0A2530" stroke="rgba(190,230,235,.22)"/>
+            <text x="260" y="365" fill="#E8F4F5">Measured wells</text>
+            <rect x="8" y="188" width="154" height="44" rx="10" fill="#0A2530" stroke="rgba(190,230,235,.22)"/>
+            <text x="85" y="215" fill="#E8F4F5">Recalibrate</text>
+          </g>
+          <g transform="translate(260 210)">
+            <circle r="50" fill="rgba(43,179,192,.12)" stroke="rgba(94,211,222,.6)"/>
+            <text y="6" fill="#5ED3DE" font-family="Geist Mono, monospace" font-size="15" text-anchor="middle">ML model</text>
+          </g>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="who-title">
+    <div class="container">
+      <span class="tag">Who it's for</span>
+      <h2 id="who-title">Everyone gains when less water is pumped.</h2>
+      <div class="who">
+        <div>
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M12 3c3 4 6 7 6 11a6 6 0 0 1-12 0c0-4 3-7 6-11z"/></svg>Farmers</h3>
+          <p>Lower water and power bills on the same land, with most of the system paid by grants and 0% loans.</p>
+          <div class="price">Free for farmers</div>
+        </div>
+        <div>
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 21h18M5 21V9l7-5 7 5v12M9 21v-6h6v6"/></svg>Irrigation dealers</h3>
+          <p>Qualified buyers instead of driving from farm to farm. Each lead comes with its funding path.</p>
+          <div class="price">5% commission on closed sales</div>
+        </div>
+        <div>
+          <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M3 10h18M5 10v8M10 10v8M14 10v8M19 10v8M2 21h20M12 3l9 5H3z"/></svg>Banks and agencies</h3>
+          <p>See where support goes and whether the water was actually saved, measured from space.</p>
+          <div class="price">Verified impact reporting</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section" id="team" aria-labelledby="team-title">
+    <div class="container">
+      <span class="tag">Team</span>
+      <h2 id="team-title">The people behind PURIFAI.</h2>
+      <ul class="team">
+        <li><img src="assets/team/kaan.webp" alt="Kaan Yiğit" width="72" height="72"><div><h3>Kaan Yiğit</h3><p>Computer Engineering and Business, Koç University</p></div></li>
+        <li><img src="assets/team/kerem.webp" alt="Kerem İkizoğlu" width="72" height="72"><div><h3>Kerem İkizoğlu</h3><p>Koç University. Two years of field work with well pumps</p></div></li>
+        <li><img src="assets/team/ugurkan.webp" alt="Uğurkan Yiğit Öztürk" width="72" height="72"><div><h3>Uğurkan Yiğit Öztürk</h3><p>Software Engineering, Ankara University. Farm and well owner</p></div></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="cta" id="contact" aria-labelledby="cta-title">
+    <div class="container">
+      <h2 id="cta-title">Let's keep the water in the ground.</h2>
+      <p class="lead">Dealers, banks, agencies and researchers: we'd like to hear from you.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="mailto:info@purifaitech.com">info@purifaitech.com</a>
+        <a class="btn btn-line" href="https://www.linkedin.com/company/purifaitech" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn btn-line" href="https://linktr.ee/purifai" target="_blank" rel="noopener">Linktree</a>
+      </div>
+    </div>
   </section>
 </main>
 
-<footer class="contact" id="contact">
-  <div class="wrap">
-    <h2>Let's keep the water in the ground.</h2>
-    <p>Dealers, banks, agencies and researchers: we'd like to hear from you.</p>
-    <div class="actions">
-      <a class="btn btn-primary" href="mailto:info@purifaitech.com">info@purifaitech.com</a>
-      <a class="btn btn-ghost" href="https://www.linkedin.com/company/purifaitech" target="_blank" rel="noopener">LinkedIn</a>
-      <a class="btn btn-ghost" href="https://linktr.ee/purifai" target="_blank" rel="noopener">Linktree</a>
-    </div>
-    <div class="foot">
-      <span>© 2026 PURIFAI</span>
-      <span>purifaitech.com</span>
-    </div>
+<footer>
+  <div class="container">
+    <span>© 2026 PURIFAI</span>
+    <nav aria-label="Footer">
+      <a href="mailto:info@purifaitech.com">Email</a>
+      <a href="https://www.linkedin.com/company/purifaitech" target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://linktr.ee/purifai" target="_blank" rel="noopener">Linktree</a>
+    </nav>
   </div>
 </footer>
 
+<script>
+  const nav = document.getElementById('nav');
+  const onScroll = () => nav.classList.toggle('scrolled', window.scrollY > 8);
+  onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+</script>
 </body>
 </html>
