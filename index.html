@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PURIFAI: Every drop pumped, made visible</title>
+<meta name="description" content="PURIFAI uses satellite data to find farms that pump too much groundwater, and helps them switch to drip and solar irrigation with grants and 0% loans.">
+<meta property="og:title" content="PURIFAI: Every drop pumped, made visible">
+<meta property="og:description" content="Satellite data that finds groundwater overuse on farms, and the grants, loans and dealers that fix it.">
+<meta property="og:image" content="https://purifaitech.com/assets/logo-512.png">
+<meta property="og:url" content="https://purifaitech.com/">
+<meta name="theme-color" content="#0E5C6B">
+<link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/logo-512.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wdth,wght@12..96,75..100,300..800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --deep: #0E5C6B;
+    --deeper: #083F4A;
+    --aquifer: #2BB3C0;
+    --mist: #CDEFF2;
+    --mist-soft: #EEF8F9;
+    --soil: #C9A77C;
+    --soil-dark: #8B6640;
+    --field: #5FAE4E;
+    --paper: #FFFFFF;
+    --ink: #0A3540;
+    --ink-soft: #4A6B73;
+    --measure: 64ch;
+    --gutter: clamp(20px, 5vw, 72px);
+    --font: "Bricolage Grotesque", system-ui, -apple-system, "Segoe UI", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font);
+    font-size: 1.0625rem;
+    line-height: 1.6;
+    font-variation-settings: "wdth" 100;
+    -webkit-font-smoothing: antialiased;
+  }
+  img { max-width: 100%; display: block; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--aquifer); outline-offset: 3px; border-radius: 4px; }
+  .wrap { width: 100%; max-width: 1240px; margin: 0 auto; padding: 0 var(--gutter); }
+
+  /* ---------- Nav ---------- */
+  .nav { display: flex; align-items: center; justify-content: space-between; padding-top: 22px; padding-bottom: 22px; }
+  .brand { display: flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 750; font-size: 1.3rem; letter-spacing: 0.02em; color: var(--deep); }
+  .brand img { width: 34px; height: auto; }
+  .nav ul { list-style: none; display: flex; gap: clamp(14px, 3vw, 32px); margin: 0; padding: 0; align-items: center; }
+  .nav a { text-decoration: none; font-weight: 500; color: var(--ink-soft); }
+  .nav a:hover { color: var(--deep); }
+  .nav .nav-cta { color: var(--paper); background: var(--deep); padding: 9px 18px; border-radius: 999px; }
+  .nav .nav-cta:hover { color: var(--paper); background: var(--deeper); }
+  @media (max-width: 640px) { .nav .hide-sm { display: none; } }
+
+  /* ---------- Hero ---------- */
+  .hero { padding-top: clamp(28px, 6vw, 72px); padding-bottom: clamp(28px, 4vw, 48px); }
+  .hero h1 {
+    margin: 0;
+    font-size: clamp(2.7rem, 7.6vw, 6.4rem);
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    font-weight: 700;
+    font-variation-settings: "wdth" 82, "opsz" 96;
+    color: var(--deep);
+    max-width: 12ch;
+  }
+  .hero p.lede { margin: 28px 0 0; max-width: 46ch; font-size: clamp(1.1rem, 1.6vw, 1.3rem); color: var(--ink-soft); line-height: 1.55; }
+  .actions { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 34px; }
+  .btn { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; font-weight: 600; padding: 14px 24px; border-radius: 999px; border: 2px solid var(--deep); transition: background-color .2s, color .2s; }
+  .btn-primary { background: var(--deep); color: var(--paper); }
+  .btn-primary:hover { background: var(--deeper); border-color: var(--deeper); }
+  .btn-ghost { color: var(--deep); background: transparent; }
+  .btn-ghost:hover { background: var(--mist-soft); }
+
+  /* ---------- Cross-section (signature element) ---------- */
+  .ground { position: relative; z-index: 0; width: 100%; line-height: 0; overflow: hidden; margin-top: -21vw; pointer-events: none; }
+  .ground svg { width: 100%; height: auto; display: block; }
+  .hero { position: relative; z-index: 1; }
+  @media (max-width: 900px) {
+    .ground { margin-top: -6vw; }
+    .ground svg { width: 190%; margin-left: -78%; }
+  }
+  .beam { transform-box: fill-box; transform-origin: 50% 0%; }
+  .water-level { transform-box: fill-box; }
+  @media (prefers-reduced-motion: no-preference) {
+    .beam { animation: sweep 2.6s ease-in-out .4s both; }
+    .water-level { animation: drop 2.4s cubic-bezier(.5,0,.2,1) 1.2s both; }
+    .hit { animation: glow 1s ease-out 2.6s both; }
+  }
+  @keyframes sweep { from { transform: rotate(30deg); opacity: 0; } 20% { opacity: 1; } 55% { transform: rotate(-18deg); } to { transform: rotate(0deg); opacity: 1; } }
+  @keyframes drop { from { transform: translateY(-34px); } to { transform: translateY(0); } }
+  @keyframes glow { from { opacity: 0; } to { opacity: 1; } }
+
+  /* ---------- Underground: problem ---------- */
+  .under { background: var(--deep); color: var(--mist); }
+  .problem { display: grid; grid-template-columns: 1fr 1.1fr; gap: clamp(32px, 6vw, 96px); padding-top: clamp(64px, 9vw, 120px); padding-bottom: clamp(64px, 9vw, 120px); }
+  .problem h2 { margin: 0; color: var(--paper); font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.05; letter-spacing: -0.025em; font-weight: 650; font-variation-settings: "wdth" 85, "opsz" 72; max-width: 14ch; }
+  .problem .intro { margin: 22px 0 0; max-width: 40ch; color: var(--mist); }
+  .readings { position: relative; list-style: none; margin: 0; padding: 0 0 0 40px; }
+  .readings::before { content: ""; position: absolute; left: 8px; top: 6px; bottom: 6px; width: 4px; border-radius: 2px; background: linear-gradient(var(--soil) 0 38%, var(--aquifer) 38% 100%); }
+  .readings li { position: relative; padding: 0 0 38px; }
+  .readings li:last-child { padding-bottom: 0; }
+  .readings li::before { content: ""; position: absolute; left: -40px; top: .55em; width: 20px; height: 4px; border-radius: 2px; background: var(--mist); }
+  .readings .value { display: block; color: var(--paper); font-weight: 700; font-size: clamp(2.2rem, 4.6vw, 3.6rem); line-height: 1; letter-spacing: -0.03em; font-variation-settings: "wdth" 78, "opsz" 96; }
+  .readings .what { display: block; margin-top: 8px; max-width: 34ch; }
+  .readings .src { display: block; margin-top: 4px; font-size: .82rem; color: #8FC6CD; }
+  @media (max-width: 820px) { .problem { grid-template-columns: 1fr; } }
+
+  /* ---------- How it works ---------- */
+  section { scroll-margin-top: 20px; }
+  .block { padding-top: clamp(72px, 10vw, 128px); padding-bottom: clamp(24px, 4vw, 48px); }
+  .block h2 { margin: 0; font-size: clamp(2rem, 4.4vw, 3.4rem); line-height: 1.05; letter-spacing: -0.025em; font-weight: 650; color: var(--deep); font-variation-settings: "wdth" 85, "opsz" 72; max-width: 18ch; }
+  .block .sub { margin: 18px 0 0; color: var(--ink-soft); max-width: 52ch; }
+  .steps { position: relative; list-style: none; margin: 56px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 4vw, 56px); counter-reset: step; }
+  .steps::before { content: ""; position: absolute; left: 28px; right: 28px; top: 27px; height: 4px; background: var(--mist); border-radius: 2px; z-index: 0; }
+  .steps li { position: relative; z-index: 1; counter-increment: step; }
+  .steps .num { width: 58px; height: 58px; border-radius: 50%; display: grid; place-items: center; background: var(--paper); border: 4px solid var(--deep); color: var(--deep); font-weight: 750; font-size: 1.35rem; }
+  .steps li:nth-child(3) .num { background: var(--deep); color: var(--paper); }
+  .steps h3 { margin: 22px 0 8px; font-size: 1.5rem; letter-spacing: -0.01em; font-weight: 650; color: var(--ink); }
+  .steps p { margin: 0; color: var(--ink-soft); max-width: 34ch; }
+  @media (max-width: 820px) {
+    .steps { grid-template-columns: 1fr; }
+    .steps::before { left: 27px; right: auto; top: 28px; bottom: 28px; width: 4px; height: auto; }
+    .steps li { padding-left: 84px; min-height: 58px; }
+    .steps .num { position: absolute; left: 0; top: 0; }
+    .steps h3 { margin-top: 10px; }
+  }
+
+  /* ---------- Who it's for ---------- */
+  .who { display: grid; grid-template-columns: repeat(3, 1fr); margin-top: 48px; border-top: 2px solid var(--mist); }
+  .who > div { padding: 28px clamp(0px, 2vw, 28px) 8px 0; }
+  .who > div + div { padding-left: clamp(16px, 2.5vw, 32px); border-left: 2px solid var(--mist); }
+  .who h3 { margin: 0 0 8px; font-size: 1.3rem; font-weight: 650; color: var(--deep); }
+  .who p { margin: 0; color: var(--ink-soft); max-width: 32ch; }
+  @media (max-width: 820px) {
+    .who { grid-template-columns: 1fr; }
+    .who > div + div { padding-left: 0; border-left: 0; border-top: 2px solid var(--mist); }
+  }
+
+  /* ---------- Recognition ---------- */
+  .recognition { margin-top: clamp(72px, 9vw, 112px); background: var(--mist-soft); }
+  .recognition .wrap { display: flex; flex-wrap: wrap; gap: 18px 48px; align-items: baseline; justify-content: space-between; padding-top: 40px; padding-bottom: 40px; }
+  .recognition p { margin: 0; font-size: clamp(1.15rem, 2vw, 1.5rem); font-weight: 600; color: var(--deep); line-height: 1.3; max-width: 30ch; }
+  .recognition span { color: var(--ink-soft); max-width: 44ch; }
+
+  /* ---------- Team ---------- */
+  .team { list-style: none; margin: 48px 0 0; padding: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: clamp(24px, 4vw, 56px); }
+  .team img { width: 136px; height: 136px; border-radius: 50%; background: var(--mist-soft); box-shadow: 0 0 0 4px var(--paper), 0 0 0 6px var(--mist); }
+  .team h3 { margin: 22px 0 4px; font-size: 1.3rem; font-weight: 650; }
+  .team p { margin: 0; color: var(--ink-soft); line-height: 1.45; }
+  @media (max-width: 820px) { .team { grid-template-columns: 1fr; } .team li { display: grid; grid-template-columns: 96px 1fr; gap: 20px; align-items: center; } .team img { width: 96px; height: 96px; } .team h3 { margin-top: 0; } }
+
+  /* ---------- Contact / footer ---------- */
+  .contact { margin-top: clamp(80px, 10vw, 128px); background: var(--deep); color: var(--mist); }
+  .contact .wrap { padding-top: clamp(64px, 9vw, 112px); padding-bottom: 40px; }
+  .contact h2 { margin: 0; color: var(--paper); font-size: clamp(2.2rem, 5.6vw, 4.6rem); line-height: 1; letter-spacing: -0.03em; font-weight: 700; font-variation-settings: "wdth" 80, "opsz" 96; max-width: 15ch; }
+  .contact p { margin: 22px 0 0; max-width: 48ch; }
+  .contact .btn-primary { background: var(--paper); color: var(--deep); border-color: var(--paper); }
+  .contact .btn-primary:hover { background: var(--mist); border-color: var(--mist); }
+  .contact .btn-ghost { color: var(--paper); border-color: rgba(255,255,255,.5); }
+  .contact .btn-ghost:hover { background: rgba(255,255,255,.08); }
+  .foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; margin-top: clamp(64px, 8vw, 96px); padding-top: 22px; border-top: 1px solid rgba(205,239,242,.25); font-size: .9rem; color: #8FC6CD; }
+  .foot a { color: #8FC6CD; }
+</style>
+</head>
+<body>
+
+<header class="wrap">
+  <nav class="nav" aria-label="Main">
+    <a class="brand" href="#top" aria-label="PURIFAI home"><img src="assets/logo.svg" alt="" width="34" height="41">PURIFAI</a>
+    <ul>
+      <li class="hide-sm"><a href="#how">How it works</a></li>
+      <li class="hide-sm"><a href="#team">Team</a></li>
+      <li><a class="nav-cta" href="mailto:info@purifaitech.com">Contact us</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="wrap hero" aria-labelledby="hero-title">
+    <h1 id="hero-title">Every drop pumped, made visible.</h1>
+    <p class="lede">PURIFAI finds the farms that pump too much groundwater, then helps them switch to drip and solar irrigation with grants and 0% loans.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="mailto:info@purifaitech.com">Talk to us</a>
+      <a class="btn btn-ghost" href="#how">See how it works</a>
+    </div>
+  </section>
+
+  <!-- Signature: a cross-section of a farm, read from the satellite down to the aquifer -->
+  <div class="ground" role="img" aria-label="Illustration: a satellite scans a field while wells reach down through the soil into an aquifer whose water level is falling.">
+    <svg viewBox="0 0 1440 640" preserveAspectRatio="xMidYMax meet" aria-hidden="true">
+      <defs>
+        <linearGradient id="beamFill" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#2BB3C0" stop-opacity=".5"/>
+          <stop offset="1" stop-color="#2BB3C0" stop-opacity=".05"/>
+        </linearGradient>
+      </defs>
+      <!-- orbit -->
+      <path d="M900 70 Q1100 30 1440 64" fill="none" stroke="#CDEFF2" stroke-width="2" stroke-dasharray="4 10"/>
+      <!-- scan beam + satellite -->
+      <g transform="translate(1040 66)">
+        <polygon class="beam" points="0,10 -96,298 96,298" fill="url(#beamFill)"/>
+        <g transform="rotate(-12)">
+          <rect x="-16" y="-12" width="32" height="24" rx="5" fill="#0E5C6B"/>
+          <rect x="-4" y="12" width="8" height="8" rx="2" fill="#0E5C6B"/>
+          <rect x="-64" y="-7" width="42" height="14" rx="2" fill="#2BB3C0"/>
+          <rect x="22" y="-7" width="42" height="14" rx="2" fill="#2BB3C0"/>
+          <line x1="-22" y1="0" x2="-16" y2="0" stroke="#0E5C6B" stroke-width="3"/>
+          <line x1="16" y1="0" x2="22" y2="0" stroke="#0E5C6B" stroke-width="3"/>
+        </g>
+      </g>
+      <!-- field surface -->
+      <rect x="0" y="364" width="1440" height="10" fill="#5FAE4E"/>
+      <path fill="#5FAE4E" d="M120 364 q6 -18 12 0 M150 364 q6 -22 12 0 M180 364 q6 -16 12 0 M520 364 q6 -18 12 0 M552 364 q6 -22 12 0 M584 364 q6 -15 12 0 M1240 364 q6 -18 12 0 M1272 364 q6 -14 12 0 M1304 364 q6 -20 12 0"/>
+      <rect class="hit" x="944" y="356" width="192" height="18" rx="4" fill="#2BB3C0"/>
+      <!-- soil with strata -->
+      <rect x="0" y="374" width="1440" height="266" fill="#C9A77C"/>
+      <path d="M0 418 Q360 402 720 420 T1440 412" fill="none" stroke="#8B6640" stroke-width="5" opacity=".5"/>
+      <path d="M0 462 Q360 476 720 458 T1440 468" fill="none" stroke="#8B6640" stroke-width="4" opacity=".3"/>
+      <!-- earlier water level -->
+      <path d="M0 482 Q360 470 720 486 T1440 478" fill="none" stroke="#0E5C6B" stroke-width="2.5" stroke-dasharray="9 10" opacity=".6"/>
+      <!-- aquifer; its level drops once on load -->
+      <g class="water-level">
+        <path d="M0 520 Q360 502 720 524 T1440 514 L1440 700 L0 700 Z" fill="#2BB3C0"/>
+        <path d="M0 520 Q360 502 720 524 T1440 514" fill="none" stroke="#CDEFF2" stroke-width="3" opacity=".7"/>
+      </g>
+      <path d="M0 584 Q360 564 720 586 T1440 578 L1440 640 L0 640 Z" fill="#0E5C6B"/>
+      <!-- wells, each one deeper than the last -->
+      <g fill="#CDEFF2" stroke="#0E5C6B" stroke-width="5">
+        <rect x="256" y="348" width="14" height="208"/>
+        <rect x="686" y="348" width="14" height="240"/>
+        <rect x="1033" y="348" width="14" height="292"/>
+      </g>
+      <g fill="#0E5C6B">
+        <rect x="246" y="330" width="34" height="20" rx="5"/>
+        <rect x="676" y="330" width="34" height="20" rx="5"/>
+        <rect x="1023" y="330" width="34" height="20" rx="5"/>
+      </g>
+    </svg>
+  </div>
+
+  <div class="under">
+    <section class="wrap problem" aria-labelledby="problem-title">
+      <div>
+        <h2 id="problem-title">Farms use groundwater faster than it refills.</h2>
+        <p class="intro">Most of it is pumped from wells nobody measures, through flood irrigation that wastes much of it. The fix exists, and the state already pays for most of it. It just isn't reaching the right farms.</p>
+      </div>
+      <ul class="readings">
+        <li><span class="value">2.1 bn m³</span><span class="what">pumped every year beyond what the Konya basin can refill</span></li>
+        <li><span class="value">11 provinces</span><span class="what">now under an official groundwater restriction</span></li>
+        <li><span class="value">7%</span><span class="what">of irrigated land switched to modern irrigation through grants since 2007</span></li>
+      </ul>
+    </section>
+  </div>
+
+  <section id="how" class="wrap block" aria-labelledby="how-title">
+    <h2 id="how-title">From a satellite view to a new irrigation system.</h2>
+    <p class="sub">We work with the people farmers already trust: local irrigation and solar-pump dealers, and the banks that finance them.</p>
+    <ol class="steps">
+      <li><div class="num" aria-hidden="true">1</div><h3>Detect</h3><p>Satellite imagery shows which fields are irrigated and how much water they really use, every few days.</p></li>
+      <li><div class="num" aria-hidden="true">2</div><h3>Match</h3><p>We bring those farmers to local dealers, with the grants and 0% loans that cover most of the cost.</p></li>
+      <li><div class="num" aria-hidden="true">3</div><h3>Verify</h3><p>After installation we check the field again from space. Every measured well makes our model sharper.</p></li>
+    </ol>
+
+    <div class="who">
+      <div><h3>Farmers</h3><p>Use less water and electricity on the same land. They pay us nothing.</p></div>
+      <div><h3>Irrigation dealers</h3><p>Spend less time searching and more time installing, with buyers who qualify for support.</p></div>
+      <div><h3>Banks and agencies</h3><p>See where support goes and whether the water was actually saved.</p></div>
+    </div>
+  </section>
+
+  <aside class="recognition" aria-label="Recognition">
+    <div class="wrap">
+      <p>Selected at KREATE for Climate, Koç University</p>
+      <span>We present PURIFAI at COP31 in Antalya on 9 November 2026.</span>
+    </div>
+  </aside>
+
+  <section id="team" class="wrap block" aria-labelledby="team-title">
+    <h2 id="team-title">The team</h2>
+    <ul class="team">
+      <li><img src="assets/team/kaan.webp" alt="Kaan Yiğit" width="136" height="136" loading="lazy"><div><h3>Kaan Yiğit</h3><p>Computer Engineering and Business, Koç University</p></div></li>
+      <li><img src="assets/team/kerem.webp" alt="Kerem İkizoğlu" width="136" height="136" loading="lazy"><div><h3>Kerem İkizoğlu</h3><p>Koç University. Two years of field work with well pumps</p></div></li>
+      <li><img src="assets/team/ugurkan.webp" alt="Uğurkan Yiğit Öztürk" width="136" height="136" loading="lazy"><div><h3>Uğurkan Yiğit Öztürk</h3><p>Ankara University. Grew up around farms and wells</p></div></li>
+    </ul>
+  </section>
+</main>
+
+<footer class="contact" id="contact">
+  <div class="wrap">
+    <h2>Let's keep the water in the ground.</h2>
+    <p>Dealers, banks, agencies and researchers: we'd like to hear from you.</p>
+    <div class="actions">
+      <a class="btn btn-primary" href="mailto:info@purifaitech.com">info@purifaitech.com</a>
+      <a class="btn btn-ghost" href="https://www.linkedin.com/company/purifaitech" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn btn-ghost" href="https://linktr.ee/purifai" target="_blank" rel="noopener">Linktree</a>
+    </div>
+    <div class="foot">
+      <span>© 2026 PURIFAI</span>
+      <span>purifaitech.com</span>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
